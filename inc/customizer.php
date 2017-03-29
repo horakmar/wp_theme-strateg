@@ -27,6 +27,18 @@ function strateg_customize_register( $wp_customize ) {
 	    'type'      => 'checkbox',
 	    'priority'  => 10
     ) );
+	$wp_customize->add_setting( 'title_image' );
+ 	$wp_customize->add_control(
+    	new WP_Customize_Image_Control(
+  	        $wp_customize,
+    	    'title_image',
+        	array(
+            	'label' => 'Image Upload',
+            	'section' => 'title_image_section',
+            	'settings' => 'title_image'
+        	)
+    	)
+	);
 }
 add_action( 'customize_register', 'strateg_customize_register' );
 

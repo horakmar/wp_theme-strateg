@@ -32,6 +32,7 @@ get_header(); ?>
 			<?php
 			endif;
 
+			echo(get_theme_mod('title_image'));
 			/* Start the Loop */
 			while ( have_posts() ) : the_post();
 
