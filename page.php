@@ -13,10 +13,6 @@
  */
 
 get_header(); ?>
-
-
-    <div><?php echo strrchr(__FILE__, '/'); ?></div>
-
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
 

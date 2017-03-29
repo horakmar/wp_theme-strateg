@@ -97,7 +97,16 @@ function strateg_widgets_init() {
 		'after_widget'  => '</section>',
 		'before_title'  => '<h2 class="widget-title">',
 		'after_title'   => '</h2>',
-	) );
+    ) );
+    register_sidebar( array(
+        'name'          => __( 'Footer_text', 'strateg' ),
+        'id'            => 'footer_text',
+        'description'   => __( 'Add widgets here.', 'strateg' ),
+        'before_widget' => '<div id="%1$s" class="footer-text %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '',
+        'after_title'   => '',
+    ) );
 }
 add_action( 'widgets_init', 'strateg_widgets_init' );
 

@@ -14,10 +14,11 @@
 	</div><!-- #content -->
 
 	<footer id="colophon" class="site-footer" role="contentinfo">
+        <?php if ( is_active_sidebar( 'footer_text' ) ){
+            dynamic_sidebar( 'footer_text' );
+        } ?>
 		<div class="site-info">
-			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'strateg' ) ); ?>"><?php printf( esc_html__( 'Proudly powered by %s', 'strateg' ), 'WordPress' ); ?></a>
-			<span class="sep"> | </span>
-			<?php printf( esc_html__( 'Theme: %1$s by %2$s.', 'strateg' ), 'strateg', '<a href="https://automattic.com/" rel="designer">Underscores.me</a>' ); ?>
+			Web běží na <a href="<?php echo esc_url( __( 'https://wordpress.org/', 'strateg' ) ); ?>">WordPressu</a>.
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->

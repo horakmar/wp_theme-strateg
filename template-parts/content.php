@@ -8,9 +8,6 @@
  */
 
 ?>
-
-<div><?php echo strrchr(__FILE__, '/'); ?></div>
-
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header">
 		<?php
@@ -44,6 +41,10 @@
 	</div><!-- .entry-content -->
 
 	<footer class="entry-footer">
-		<?php strateg_entry_footer(); ?>
+        <?php 
+        strateg_entry_footer();
+        if(! is_single() && (($wp_query->current_post + 1) < ($wp_query->post_count))){
+            print('<hr width="30%">');
+        } ?>
 	</footer><!-- .entry-footer -->
 </article><!-- #post-## -->

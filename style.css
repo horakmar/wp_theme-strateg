@@ -25,6 +25,9 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.io/normalize.css/
 ----------------------------------------------------------------
 # Normalize
 # Typography
+# Layout
+  ## Header
+  ## Footer
 # Elements
 # Forms
 # Navigation
@@ -56,25 +59,12 @@ body {
 	margin: 0;
 }
 
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-main,
-menu,
-nav,
-section,
-summary {
+article, aside, details, figcaption, figure, footer, header,
+main, menu, nav, section, summary {
 	display: block;
 }
 
-audio,
-canvas,
-progress,
-video {
+audio, canvas, progress, video {
 	display: inline-block;
 	vertical-align: baseline;
 }
@@ -84,8 +74,7 @@ audio:not([controls]) {
 	height: 0;
 }
 
-[hidden],
-template {
+[hidden], template {
 	display: none;
 }
 
@@ -125,8 +114,7 @@ small {
 	font-size: 80%;
 }
 
-sub,
-sup {
+sub, sup {
 	font-size: 75%;
 	line-height: 0;
 	position: relative;
@@ -162,19 +150,12 @@ pre {
 	overflow: auto;
 }
 
-code,
-kbd,
-pre,
-samp {
+code, kbd, pre, samp {
 	font-family: monospace, monospace;
 	font-size: 1em;
 }
 
-button,
-input,
-optgroup,
-select,
-textarea {
+button, input, optgroup, select, textarea {
 	color: inherit;
 	font: inherit;
 	margin: 0;
@@ -184,13 +165,11 @@ button {
 	overflow: visible;
 }
 
-button,
-select {
+button, select {
 	text-transform: none;
 }
 
-button,
-html input[type="button"],
+button, html input[type="button"],
 input[type="reset"],
 input[type="submit"] {
 	-webkit-appearance: button;
@@ -260,35 +239,28 @@ th {
 /*--------------------------------------------------------------
 # Typography
 --------------------------------------------------------------*/
-body,
-button,
-input,
-select,
-textarea {
-	color: #404040;
+body, button, input, select, textarea {
+	color: #dddddd;
 	font-family: sans-serif;
 	font-size: 16px;
-	font-size: 1rem;
 	line-height: 1.5;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
+    color: #62d99c;
 	clear: both;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    color: #62d99c;
+	text-decoration: none;
 }
 
 p {
 	margin-bottom: 1.5em;
 }
 
-dfn,
-cite,
-em,
-i {
+dfn, cite, em, i {
 	font-style: italic;
 }
 
@@ -312,23 +284,18 @@ pre {
 	padding: 1.6em;
 }
 
-code,
-kbd,
-tt,
-var {
+code, kbd, tt, var {
 	font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
 	font-size: 15px;
 	font-size: 0.9375rem;
 }
 
-abbr,
-acronym {
+abbr, acronym {
 	border-bottom: 1px dotted #666;
 	cursor: help;
 }
 
-mark,
-ins {
+mark, ins {
 	background: #fff9c0;
 	text-decoration: none;
 }
@@ -344,37 +311,31 @@ html {
 	box-sizing: border-box;
 }
 
-*,
-*:before,
-*:after { /* Inherit box-sizing to make it easier to change the property for components that leverage other behavior; see http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+*, *:before, *:after {
+/* Inherit box-sizing to make it easier to change the property for components that leverage other behavior; see http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
 	box-sizing: inherit;
 }
 
 body {
-	background: #fff; /* Fallback for when there is no custom background color defined. */
+	background: #000; /* Fallback for when there is no custom background color defined. */
 }
 
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
+blockquote:before, blockquote:after, q:before, q:after {
 	content: "";
 }
 
-blockquote,
-q {
+blockquote, q {
 	quotes: "" "";
 }
 
 hr {
-	background-color: #ccc;
+	background: #ccc;
 	border: 0;
 	height: 1px;
 	margin-bottom: 1.5em;
 }
 
-ul,
-ol {
+ul, ol {
 	margin: 0 0 1.5em 3em;
 }
 
@@ -386,8 +347,7 @@ ol {
 	list-style: decimal;
 }
 
-li > ul,
-li > ol {
+li > ul, li > ol {
 	margin-bottom: 0;
 	margin-left: 1.5em;
 }
@@ -415,116 +375,28 @@ table {
 }
 
 /*--------------------------------------------------------------
-# Forms
---------------------------------------------------------------*/
-button,
-input[type="button"],
-input[type="reset"],
-input[type="submit"] {
-	border: 1px solid;
-	border-color: #ccc #ccc #bbb;
-	border-radius: 3px;
-	background: #e6e6e6;
-	color: rgba(0, 0, 0, .8);
-	font-size: 12px;
-	font-size: 0.75rem;
-	line-height: 1;
-	padding: .6em 1em .4em;
-}
-
-button:hover,
-input[type="button"]:hover,
-input[type="reset"]:hover,
-input[type="submit"]:hover {
-	border-color: #ccc #bbb #aaa;
-}
-
-button:focus,
-input[type="button"]:focus,
-input[type="reset"]:focus,
-input[type="submit"]:focus,
-button:active,
-input[type="button"]:active,
-input[type="reset"]:active,
-input[type="submit"]:active {
-	border-color: #aaa #bbb #bbb;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="url"],
-input[type="password"],
-input[type="search"],
-input[type="number"],
-input[type="tel"],
-input[type="range"],
-input[type="date"],
-input[type="month"],
-input[type="week"],
-input[type="time"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="color"],
-textarea {
-	color: #666;
-	border: 1px solid #ccc;
-	border-radius: 3px;
-	padding: 3px;
-}
-
-select {
-	border: 1px solid #ccc;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="url"]:focus,
-input[type="password"]:focus,
-input[type="search"]:focus,
-input[type="number"]:focus,
-input[type="tel"]:focus,
-input[type="range"]:focus,
-input[type="date"]:focus,
-input[type="month"]:focus,
-input[type="week"]:focus,
-input[type="time"]:focus,
-input[type="datetime"]:focus,
-input[type="datetime-local"]:focus,
-input[type="color"]:focus,
-textarea:focus {
-	color: #111;
-}
-
-textarea {
-	width: 100%;
-}
-
-/*--------------------------------------------------------------
 # Navigation
 --------------------------------------------------------------*/
 /*--------------------------------------------------------------
 ## Links
 --------------------------------------------------------------*/
 a {
-	color: royalblue;
+	color: #ff3;
 }
 
-a:visited {
-	color: purple;
+a:hover, a:focus, a:active {
+	color: #ff8700;
 }
 
-a:hover,
-a:focus,
-a:active {
-	color: midnightblue;
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
+    color: #ff3;
 }
 
 a:focus {
 	outline: thin dotted;
 }
 
-a:hover,
-a:active {
+a:hover, a:active {
 	outline: 0;
 }
 
@@ -532,71 +404,34 @@ a:active {
 ## Menus
 --------------------------------------------------------------*/
 .main-navigation {
+    background: #0c3b35;
 	clear: both;
 	display: block;
-	float: left;
 	width: 100%;
 }
-
 .main-navigation ul {
 	display: none;
 	list-style: none;
 	margin: 0;
 	padding-left: 0;
 }
-
 .main-navigation li {
-	float: left;
-	position: relative;
+    color: #ff3;
+    display: block;
 }
-
+.main-navigation li:hover, .main-navigation li.focus {
+    background: #c7a222;
+}
 .main-navigation a {
-	display: block;
 	text-decoration: none;
 }
-
-.main-navigation ul ul {
-	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
-	float: left;
-	position: absolute;
-	top: 1.5em;
-	left: -999em;
-	z-index: 99999;
-}
-
-.main-navigation ul ul ul {
-	left: -999em;
-	top: 0;
-}
-
-.main-navigation ul ul a {
-	width: 200px;
-}
-
-.main-navigation ul ul li {
-
-}
-
 .main-navigation li:hover > a,
 .main-navigation li.focus > a {
+    color: #000;
 }
 
-.main-navigation ul ul :hover > a,
-.main-navigation ul ul .focus > a {
-}
-
-.main-navigation ul ul a:hover,
-.main-navigation ul ul a.focus {
-}
-
-.main-navigation ul li:hover > ul,
-.main-navigation ul li.focus > ul {
-	left: auto;
-}
-
-.main-navigation ul ul li:hover > ul,
-.main-navigation ul ul li.focus > ul {
-	left: 100%;
+.main-navigation .current-menu-item {
+    background-color: rgba(0,0,0,0.40);
 }
 
 .main-navigation .current_page_item > a,
@@ -605,19 +440,25 @@ a:active {
 .main-navigation .current-menu-ancestor > a {
 }
 
+.main-navigation .current_page_item > li {
+}
+
 /* Small menu. */
 .menu-toggle,
 .main-navigation.toggled ul {
 	display: block;
+    font-size: 90%;
 }
 
-@media screen and (min-width: 37.5em) {
-	.menu-toggle {
-		display: none;
-	}
-	.main-navigation ul {
-		display: block;
-	}
+.main-navigation.toggled li {
+    padding-left: 10px;
+}
+
+button.menu-toggle {
+    width: 100%;
+    background: #0c3b35;
+    color: #ff3;
+    border: none;
 }
 
 .site-main .comment-navigation,
@@ -641,6 +482,25 @@ a:active {
 	text-align: right;
 	width: 50%;
 }
+
+
+/* Large menu */
+@media only screen and (min-width: 37.5em) {
+	.menu-toggle {
+		display: none;
+	}
+	.main-navigation ul {
+		display: block;
+	}
+    .main-navigation li {
+        display: inline-block;
+        padding: 6px 20px;
+        margin: 0;
+        position: relative;
+        transition: background 0.3s;
+    }
+}
+
 
 /*--------------------------------------------------------------
 # Accessibility
@@ -743,6 +603,19 @@ a:active {
 	max-width: 100%;
 }
 
+.widget-title {
+    background-color: #0c3b35;
+	color: #ff8700;
+    padding: 0px 5px;
+    font-size: 120%;
+    margin-bottom: 20px;
+}
+
+.widget img {
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
 /*--------------------------------------------------------------
 # Content
 --------------------------------------------------------------*/
@@ -757,7 +630,10 @@ a:active {
 	margin: 0 0 1.5em;
 }
 
-.byline,
+.entry-title {
+    margin-bottom: 5px;
+}
+
 .updated:not(.published) {
 	display: none;
 }
@@ -768,7 +644,6 @@ a:active {
 }
 
 .page-content,
-.entry-content,
 .entry-summary {
 	margin: 1.5em 0 0;
 }
@@ -778,17 +653,70 @@ a:active {
 	margin: 0 0 1.5em;
 }
 
+.post-author, .post-date {
+    color: #ff8700;
+    padding-right: 20px;
+    font-style: italic;
+    font-size: 90%;
+}
+
 /*--------------------------------------------------------------
 ## Comments
 --------------------------------------------------------------*/
+.comment-metadata a {
+    text-decoration: none;
+    vertical-align: baseline;
+}
+.comments-title {
+    border-bottom: 1px solid #ddd;
+}
+.comment-list {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+}
 .comment-content a {
 	word-wrap: break-word;
 }
+.comment-body {
+    background: #0c3b35;
+    padding: 10px 10px 10px 80px;
+    margin: 10px 0;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    position: relative;
+}
+.comment .avatar {
+    position: absolute;
+    top: 10px; left: 10px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+.comment-author {
+    float: left;
+    margin-right: 10px;
+}
+.says { display: none; }
 
+.comment-metadata {
+    font-size: 80%;
+    line-height: 200%;
+    vertical-align: baseline;
+}
+.edit-link {
+    padding-left: 20px;
+}
 .bypostauthor {
 	display: block;
 }
-
+.comment-reply-link {
+    font-size: 80%;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+}
 /*--------------------------------------------------------------
 # Infinite scroll
 --------------------------------------------------------------*/
@@ -893,3 +821,176 @@ object {
 .gallery-caption {
 	display: block;
 }
+
+/*--------------------------------------------------------------
+# Forms
+--------------------------------------------------------------*/
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+	border: 1px solid;
+	border-color: #ccc #ccc #bbb;
+	border-radius: 3px;
+	background: #e6e6e6;
+	color: rgba(0, 0, 0, .8);
+	font-size: 12px;
+	font-size: 0.75rem;
+	line-height: 1;
+	padding: .6em 1em .4em;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover {
+	border-color: #ccc #bbb #aaa;
+}
+
+button:focus,
+input[type="button"]:focus,
+input[type="reset"]:focus,
+input[type="submit"]:focus,
+button:active,
+input[type="button"]:active,
+input[type="reset"]:active,
+input[type="submit"]:active {
+	border-color: #aaa #bbb #bbb;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="range"],
+input[type="date"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="color"],
+textarea {
+	color: #666;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	padding: 3px;
+}
+
+select {
+	border: 1px solid #ccc;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="range"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="week"]:focus,
+input[type="time"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="color"]:focus,
+textarea:focus {
+	color: #111;
+}
+
+textarea {
+	width: 100%;
+}
+/*--------------------------------------------------------------
+# Layout
+--------------------------------------------------------------*/
+#page {
+    width: 98%;
+    clear: both;
+    margin: auto;
+}
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+.site-branding img{
+    display: block;
+    margin: auto;
+}
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+.site-footer {
+	clear: both;
+    position: relative;
+	width: 100%;
+    background-color: #0c3b35;
+    margin-bottom: 10px;
+    color: #aaa;
+}
+.site-footer a {
+    color: #cdcd53;
+    text-decoration: none;
+}
+.site-info {
+    font-size: 80%;
+}
+
+/* ___ Tablet ( > 600px )  ------------------------------------------ */
+@media only screen and (min-width: 37.5em) {
+	.menu-toggle {
+		display: none;
+	}
+	.main-navigation ul {
+		display: block;
+	}
+}
+
+/* ___ Desktop ( > 960px ) ------------------------------------------ */
+@media only screen and (min-width: 60em) {
+    #page {
+        width: 90%;
+        max-width: 1080px;
+        clear: both;
+        margin: auto;
+    }
+    .content-area {
+        float: left;
+        margin: 0 -20% 0 0;
+        width: 100%;
+    }
+    .site-main {
+        margin: 0 25% 0 0;
+    }
+    .site-content {
+        padding-top: 20px;
+    }
+    .widget-area {
+        float: right;
+        width: 20%;
+    }
+    .footer-text {
+        float: left;
+        padding: 10px;
+    }
+    .site-info {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+    }
+}
+
+/* ___ Desktop ( > 1280px ) ----------------------------------------- */
+@media only screen and (min-width: 80em) {
+    #site-navigation, .site-footer, .widget-title {
+        border-radius: 5px;
+    }
+}
+/* -------------------------------------------------------------------------- */
+

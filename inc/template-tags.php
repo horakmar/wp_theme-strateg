@@ -25,16 +25,15 @@ function strateg_posted_on() {
 	);
 
 	$posted_on = sprintf(
-		esc_html_x( 'Posted on %s', 'post date', 'strateg' ),
-		'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
+		esc_html_x( '%s', 'post date', 'strateg' ), $time_string
 	);
 
 	$byline = sprintf(
-		esc_html_x( 'by %s', 'post author', 'strateg' ),
-		'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
+		esc_html_x( '%s', 'post author', 'strateg' ),
+		'<span class="author vcard">' . esc_html( get_the_author() ) . '</span>'
 	);
 
-	echo '<span class="posted-on">' . $posted_on . '</span><span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
+	echo '<span class="post-date">' . $posted_on . '</span><span class="post-author"> ' . $byline . '</span>'; // WPCS: XSS OK.
 
 }
 endif;
@@ -57,24 +56,7 @@ function strateg_entry_footer() {
 		if ( $tags_list ) {
 			printf( '<span class="tags-links">' . esc_html__( 'Tagged %1$s', 'strateg' ) . '</span>', $tags_list ); // WPCS: XSS OK.
 		}
-	}
-
-	if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
-		echo '<span class="comments-link">';
-		/* translators: %s: post title */
-		comments_popup_link( sprintf( wp_kses( __( 'Leave a Comment<span class="screen-reader-text"> on %s</span>', 'strateg' ), array( 'span' => array( 'class' => array() ) ) ), get_the_title() ) );
-		echo '</span>';
-	}
-
-	edit_post_link(
-		sprintf(
-			/* translators: %s: Name of current post */
-			esc_html__( 'Edit %s', 'strateg' ),
-			the_title( '<span class="screen-reader-text">"', '"</span>', false )
-		),
-		'<span class="edit-link">',
-		'</span>'
-	);
+    }
 }
 endif;
 

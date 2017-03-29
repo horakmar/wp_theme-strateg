@@ -1,5 +1,7 @@
 # Copyright (C) 2016 Automattic
 # This file is distributed under the GNU General Public License v2 or later.
+# Compile:
+# msgfmt -o strateg-cs_CZ.mo strateg-cs_CZ.po
 msgid ""
 msgstr ""
 "Project-Id-Version: _s 1.0.0\n"
@@ -69,7 +71,7 @@ msgstr "Komentáře jsou uzavřeny."
 #: footer.php:18
 #@ _s
 msgid "https://wordpress.org/"
-msgstr "https://wordpress.org/"
+msgstr "https://cs.wordpress.org/"
 
 #: footer.php:18
 #, php-format
@@ -222,3 +224,10 @@ msgstr "Marťas"
 #@ _s
 msgid "http://automattic.com/"
 msgstr ""
+
+#: wp-admin/widgets.php
+msgid "Add widgets here."
+msgstr "Přidejte widgety."
+
+msgid "Footer_text"
+msgstr "Text v patičce"

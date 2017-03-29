@@ -10,13 +10,15 @@
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
  * @package strateg
+ *
+ * Print file name for debugging: 
+ *   echo strrchr(__FILE__, '/');
  */
 
 get_header(); ?>
 
-    <div><?php echo strrchr(__FILE__, '/'); ?></div>
 
-	<div id="primary" class="content-area">
+    <div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
 
 		<?php
