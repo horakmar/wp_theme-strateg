@@ -32,7 +32,20 @@ get_header(); ?>
 			<?php
 			endif;
 
-			echo(get_theme_mod('title_image'));
+            # Debug output of customized entries
+            if(get_theme_mod('entry_debug')){
+                echo("<div>entry_debug = " . get_theme_mod('entry_debug') .
+                    "<br>entry_race_id = " . get_theme_mod('entry_race_id') .
+                    "<br>entry_deadline = " . get_theme_mod('entry_deadline') .
+                    "<br>entry_show_meal = " . get_theme_mod('entry_show_meal') .
+                    "<div>");
+            }
+
+            $title_image = get_theme_mod('title_image');
+            if($title_image != ''){
+                echo("<img class=\"title-image\" src=\"$title_image\">");
+            }
+
 			/* Start the Loop */
 			while ( have_posts() ) : the_post();
 

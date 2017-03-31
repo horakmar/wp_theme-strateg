@@ -42,8 +42,11 @@ msgstr "Zkuste měsíční archivy. %1$s"
 msgctxt "comments title"
 msgid "One thought on &ldquo;%2$s&rdquo;"
 msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Komentář k &ldquo;%2$s&rdquo;"
+msgstr[1] "Komentáře k &ldquo;%2$s&rdquo; (%1$s)"
+
+msgid "Comments"
+msgstr "Komentáře"
 
 #: comments.php:40
 #: comments.php:61
@@ -229,5 +232,13 @@ msgstr ""
 msgid "Add widgets here."
 msgstr "Přidejte widgety."
 
+#: functions.php:102
 msgid "Footer_text"
 msgstr "Text v patičce"
+
+#: inc/customizer.php:18 inc/customizer.php:30
+msgid "Title image"
+msgstr "Titulní obrázek"
+
+msgid "Entry form"
+msgstr "Přihlášky"

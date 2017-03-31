@@ -609,6 +609,7 @@ button.menu-toggle {
     padding: 0px 5px;
     font-size: 120%;
     margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 .widget img {
@@ -629,8 +630,11 @@ button.menu-toggle {
 .hentry {
 	margin: 0 0 1.5em;
 }
-
+.title-image {
+    margin-top: 10px;
+}
 .entry-title {
+    margin-top: 10px;
     margin-bottom: 5px;
 }
 
@@ -658,6 +662,10 @@ button.menu-toggle {
     padding-right: 20px;
     font-style: italic;
     font-size: 90%;
+}
+.history_year {
+    font-weight: bold;
+    color: #ff8700
 }
 
 /*--------------------------------------------------------------
