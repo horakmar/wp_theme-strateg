@@ -21,7 +21,7 @@ function entry_form() {
 ?>
 <div id="entryform">
 <form action="" method="post">
-<p>Název týmu&nbsp;&nbsp;<input type="text" name="team" size="30"<?php ev('team')?>></p>
+<p>Název týmu&nbsp;&nbsp;<input class="shadbox" type="text" name="team" size="30"<?php ev('team') ?> required></p>
 <hr>
 <?php
     for($i=0; $i<=1; $i++):
@@ -54,7 +54,7 @@ function entry_form() {
 </select></td></tr>
 <tr><td>Telefon</td><td>Email</td><td>Pohlaví</td></tr>
 <tr><td><input type="text" name="phone[<?php echo $i?>]" size="20"<?php ev('phone',$i)?>></td>
-<td><input type="text" name="email[<?php echo $i?>]" size="20"<?php ev('email',$i)?>></td>
+<td><input type="email" name="email[<?php echo $i?>]" size="20"<?php ev('email',$i)?>></td>
 <td><input type="radio" value="0" name="sex[<?php echo $i?>]"<?php if($vals['sex'][$i] == 'm'){ echo "checked"; }?>>Muž
 &nbsp;<input type="radio" value="0" name="sex[<?php echo $i?>]"<?php if($vals['sex'][$i] == 'z'){ echo "checked"; }?>>Žena
 </td></tr>
