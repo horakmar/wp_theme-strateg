@@ -18,6 +18,7 @@ function ev($key, $index=0) {
 
 function entry_form() {
     global $vals;
+    $vals['alone'] = 'on';
 ?>
 <div id="entryform">
 <form action="" method="post">
@@ -39,9 +40,9 @@ function entry_form() {
 ?>
 <table class="formtable">
 <tr><td>Jméno</td><td>Příjmení</td><td>Rok narození</td></tr>
-<tr><td><input type="text" name="fname[<?php echo $i?>]" size="20"<?php ev('fname',$i)?>></td>
-<td><input type="text" name="sname[<?php echo $i?>]" size="20"<?php ev('sname',$i)?>></td>
-<td><select name="ybirth[<?php echo $i?>]">
+<tr><td><input type="text" id="fname<?php echo $i?>" name="fname[<?php echo $i?>]" size="20"<?php ev('fname',$i)?> required></td>
+<td><input type="text" id="sname<?php echo $i?>" name="sname[<?php echo $i?>]" size="20"<?php ev('sname',$i)?> required></td>
+<td><select name="ybirth[<?php echo $i?>]" required>
 <?php for($j = 1950; $j <= 2010; $j++){
 	echo "<option";
 	if(isset($vals['ybirth'][$i])){
@@ -55,8 +56,8 @@ function entry_form() {
 <tr><td>Telefon</td><td>Email</td><td>Pohlaví</td></tr>
 <tr><td><input type="text" name="phone[<?php echo $i?>]" size="20"<?php ev('phone',$i)?>></td>
 <td><input type="email" name="email[<?php echo $i?>]" size="20"<?php ev('email',$i)?>></td>
-<td><input type="radio" value="0" name="sex[<?php echo $i?>]"<?php if($vals['sex'][$i] == 'm'){ echo "checked"; }?>>Muž
-&nbsp;<input type="radio" value="0" name="sex[<?php echo $i?>]"<?php if($vals['sex'][$i] == 'z'){ echo "checked"; }?>>Žena
+<td><input type="radio" value="0" name="sex[<?php echo $i?>]"<?php if(isset($vals['sex'][$i]) && $vals['sex'][$i] == 'm'){ echo "checked"; }?>>Muž
+&nbsp;<input type="radio" value="0" name="sex[<?php echo $i?>]"<?php if(isset($vals['sex'][$i]) && $vals['sex'][$i] == 'z'){ echo "checked"; }?>>Žena
 </td></tr>
 <tr><td>SHOCartLiga ID</td><td><?php if(get_theme_mod('entry_show_meal')) echo 'Guláš po dojezdu' ?></td><td></td></tr>
 <tr><td><input type="text" name="shocart_id[<?php echo $i?>]" size="5"<?php ev('shocart_id',$i)?>></td>
@@ -84,6 +85,9 @@ function entry_form() {
 <p><input type="submit" name="cancel" value=" Zrušit ">&nbsp;&nbsp;&nbsp;<input type="submit" name="ok" value=" Odeslat "></p>
 </form>
 </div><!-- entryform -->
+<script>
+ToggleSecond(document.getElementById('alone').checked);
+</script>
 <?php
 }
 add_shortcode('entryform', 'entry_form');
