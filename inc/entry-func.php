@@ -6,19 +6,22 @@ function entry_scripts() {
 }
 add_action('wp_enqueue_scripts', 'entry_scripts');
 
-function ev($key, $index=0) {
-    global $vals;
-    if(isset($vals[$key][$index])){
-        $r = $vals[$key][$index];
-    }elseif(isset($vals[$key])){
-        $r = $vals[$key];
+function ev($key, $index=99) {
+	global $vals;
+	if($index == 99){
+		if(isset($vals[$key])){
+			$r = $vals[$key];
+		}
+	}else{
+    	if(isset($vals[$key][$index])){
+        	$r = $vals[$key][$index];
+		}
     }
 	if(isset($r)) echo " value=\"$r\"";
 }
 
 function entry_form() {
     global $vals;
-    $vals['alone'] = 'on';
 ?>
 <div id="entryform">
 <form action="" method="post">
@@ -41,7 +44,7 @@ function entry_form() {
 <table class="formtable">
 <tr><td>Jméno</td><td>Příjmení</td><td>Rok narození</td></tr>
 <tr><td><input type="text" id="fname<?php echo $i?>" name="fname[<?php echo $i?>]" size="20"<?php ev('fname',$i)?> required></td>
-<td><input type="text" id="sname<?php echo $i?>" name="sname[<?php echo $i?>]" size="20"<?php ev('sname',$i)?> required></td>
+<td><input type="text" id="sname<?php echo $i?>" name="sname[<?php echo $i?>]" size="20"<?php ev('sname',$i)?>></td>
 <td><select name="ybirth[<?php echo $i?>]" required>
 <?php for($j = 1950; $j <= 2010; $j++){
 	echo "<option";
@@ -56,8 +59,8 @@ function entry_form() {
 <tr><td>Telefon</td><td>Email</td><td>Pohlaví</td></tr>
 <tr><td><input type="text" name="phone[<?php echo $i?>]" size="20"<?php ev('phone',$i)?>></td>
 <td><input type="email" name="email[<?php echo $i?>]" size="20"<?php ev('email',$i)?>></td>
-<td><input type="radio" value="0" name="sex[<?php echo $i?>]"<?php if(isset($vals['sex'][$i]) && $vals['sex'][$i] == 'm'){ echo "checked"; }?>>Muž
-&nbsp;<input type="radio" value="0" name="sex[<?php echo $i?>]"<?php if(isset($vals['sex'][$i]) && $vals['sex'][$i] == 'z'){ echo "checked"; }?>>Žena
+<td><input type="radio" value="m" name="sex[<?php echo $i?>]"<?php if(isset($vals['sex'][$i]) && $vals['sex'][$i] == 'm'){ echo "checked"; }?>>Muž
+&nbsp;<input type="radio" value="z" name="sex[<?php echo $i?>]"<?php if(isset($vals['sex'][$i]) && $vals['sex'][$i] == 'z'){ echo "checked"; }?>>Žena
 </td></tr>
 <tr><td>SHOCartLiga ID</td><td><?php if(get_theme_mod('entry_show_meal')) echo 'Guláš po dojezdu' ?></td><td></td></tr>
 <tr><td><input type="text" name="shocart_id[<?php echo $i?>]" size="5"<?php ev('shocart_id',$i)?>></td>
