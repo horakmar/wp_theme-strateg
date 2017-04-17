@@ -689,8 +689,14 @@ button.menu-toggle {
     box-shadow: none;
   }
   
-.shadbox {
+.invalid {
 	box-shadow: 0 0 10px #ffff00;
+}
+.errmsg {
+	background: #ff2c00;
+	color: #ff0;
+	padding: 3px 3px 3px 10px;
+	border-radius: 3px;
 }
 
 /*--------------------------------------------------------------

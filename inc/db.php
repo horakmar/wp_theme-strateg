@@ -1,5 +1,6 @@
 <?php
-function create_tables($wpdb, $prefix){
+function create_tables($prefix){
+	global $wpdb;
     $res = $wpdb->query("
 CREATE TABLE IF NOT EXISTS `{$prefix}_person` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
