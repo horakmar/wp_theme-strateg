@@ -151,6 +151,11 @@ require get_template_directory() . '/inc/customizer.php';
  */
 require get_template_directory() . '/inc/jetpack.php';
 
+/**
+ * Implement the Custom Admin.
+ */
+require get_template_directory() . '/inc/custom-admin.php';
+
 require get_template_directory() . '/inc/db.php';
 
 require get_template_directory() . '/inc/entry-func.php';

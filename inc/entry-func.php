@@ -32,6 +32,10 @@ function inval($key, $i=99) {
 	}
 }
 
+function req($i, $default='') {
+    return isset($_REQUEST[$i]) ? $_REQUEST[$i] : $default;
+}
+
 function entry_form() {
     global $vals;
 ?>
@@ -88,8 +92,8 @@ function entry_form() {
 </tr></table>
 <hr>
 <?php
-        if($i > 0) echo '</div><!-- second_biker -->';
-    endfor;
+    if($i > 0) echo '</div><!-- second_biker -->';
+endfor;
 ?>
 <p>Poznámka - cokoliv byste chtěli dodat<br>
 <input type="text" name="comment" size="60"<?php echo ev('comment')?>></p>
@@ -105,17 +109,62 @@ ToggleSecond(document.getElementById('alone').checked);
 }
 add_shortcode('entryform', 'entry_form');
 
-function tables_init(){
-	$prefix = get_theme_mod('entry_race_id');
-	if(empty($prefix)){
-		echo '<div class="errmsg">Není vyplněn identifikátor závodu.</div>';
-	}
-	if(create_tables($prefix) == 0){
-		echo '<div class="errmsg">Tabulky se nepodařilo vytvořit.</div>';
-	}else{
-		echo '<div class="okmsg">Tabulky vytvořeny.</div>';
-	}
+function entry_list() {
+    global $wpdb;
+    $tb_prefix = get_theme_mod('entry_race_id');
+    $table_t = $tb_prefix . '_team';
+    $table_p = $tb_prefix . '_person';
+    $entries = $wpdb->get_results("SELECT t.id, t.name, t.comment,
+	  p1.fname as fname1, p1.sname as sname1, p1.sex as sex1, p1.meal as meal1,
+	  p2.fname as fname2, p2.sname as sname2, p2.sex as sex2, p2.meal as meal2
+      FROM `$table_t` t LEFT JOIN `$table_p` p1 ON p1.id = t.p1_id
+      LEFT JOIN `$table_p` p2 ON p2.id = t.p2_id
+      ORDER BY t.d_create, t.id",
+      ARRAY_A);
+    if($entries) {
+        $url = get_template_directory_uri();
+?>
+<table id="entrylist">
+<thead><tr>
+<td class="number" width="5%">Číslo</td><td>Tým</td><td>1. závodník</td><td>2. závodník</td><td>Kat.</td><td>Poznámka</td><td class="links"></td><td class="links"></td>
+</tr></thead>
+<tbody>
+<?php   $i = 1;
+        foreach($entries as $entry):
+            $scat = $entry['sex1'] . $entry['sex2'];
+            switch($scat){
+            case 'mw':
+            case 'wm': $cat = 'MW'; break;
+            case 'mm':
+            case  'm': $cat = 'MM'; break;
+            case 'ww':
+            case  'w': $cat = 'WW'; break;
+            default: $cat = 'XX';
+        }
+?>
+<tr class="<?php echo ($i % 2 == 0) ? 'even' : 'odd' ?>">
+<td class="number"><?php echo($i++) ?></td><td><?php echo $entry['name'] ?></td>
+<td><?php echo $entry['fname1'] . " " . $entry['sname1'] ?></td>
+<td><?php echo $entry['fname2'] . " " . $entry['sname2'] ?></td>
+<td><?php echo $cat ?></td><td><?php echo $entry['comment'] ?></td>
+<td class="links"><a href="zadejheslo.php?id=<?php echo $entry['id'] ?>"><img src="<?php echo $url ?>/img/edit.gif" title="Upravit" width="14" height="14" border="0"></a></td>
+<td class="links"><a href="delete.php?id=<?php echo $entry['id'] ?>"><img src="<?php echo $url ?>/img/delete.gif" title="Smazat" width="14" height="14" border="0"></a></td>
+</tr>
+<?php   endforeach;?>
+</tbody></table>
+<?php
+    }
 }
-add_shortcode('tbinit', 'tables_init');
-
+add_shortcode('entrylist', 'entry_list');
+/*
+?>
+<p><table class="entries" border="1" cellpadding="3">
+<thead><tr>
+<td>Číslo</td><td>Tým</td><td>1. závodník</td><td>2. závodník</td><td>Kat.</td><td>Poznámka</td><td></td><td></td>
+</tr></thead>
+<tbody>
+<?php
+        foreach($entries as $entry) {
+            if($id != $entry['id'])
+ */
 ?>

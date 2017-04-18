@@ -274,6 +274,7 @@ address {
 
 pre {
 	background: #eee;
+    color: #000;
 	font-family: "Courier 10 Pitch", Courier, monospace;
 	font-size: 15px;
 	font-size: 0.9375rem;
@@ -697,6 +698,29 @@ button.menu-toggle {
 	color: #ff0;
 	padding: 3px 3px 3px 10px;
 	border-radius: 3px;
+}
+#entrylist {
+    background: #0c3b35;
+}
+#entrylist thead {
+    color: #ff8700;
+}
+#entrylist td {
+    padding: 0 5px;
+	border: 1px solid #000;
+}
+#entrylist .odd {
+    background: #5e4613;
+}
+#entrylist .even {
+    background: #571221;
+}
+
+#entrylist .number {
+    text-align: right;
+}
+#entrylist .links {
+    text-align: center;
 }
 
 /*--------------------------------------------------------------
