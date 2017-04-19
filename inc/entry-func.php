@@ -32,8 +32,12 @@ function inval($key, $i=99) {
 	}
 }
 
-function req($i, $default='') {
-    return isset($_REQUEST[$i]) ? $_REQUEST[$i] : $default;
+function sanitize_id($id) {
+    if(is_numeric($id)) {
+        return (int) $id;
+    } else {
+        return 0;
+    }
 }
 
 function entry_form() {
@@ -99,7 +103,7 @@ endfor;
 <input type="text" name="comment" size="60"<?php echo ev('comment')?>></p>
 <p>Heslo pro změny v přihlášce<br>
 <input type="text" name="password"<?php echo ev('password'); inval('password') ?>></p>
-<p><input type="submit" name="cancel" value=" Zrušit " formnovalidate>&nbsp;&nbsp;&nbsp;<input type="submit" name="ok" value=" Odeslat "></p>
+<p><input type="submit" name="ok" value=" Odeslat "></p>
 </form>
 </div><!-- entryform -->
 <script>
@@ -115,10 +119,10 @@ function entry_list() {
     $table_t = $tb_prefix . '_team';
     $table_p = $tb_prefix . '_person';
     $entries = $wpdb->get_results("SELECT t.id, t.name, t.comment,
-	  p1.fname as fname1, p1.sname as sname1, p1.sex as sex1, p1.meal as meal1,
-	  p2.fname as fname2, p2.sname as sname2, p2.sex as sex2, p2.meal as meal2
-      FROM `$table_t` t LEFT JOIN `$table_p` p1 ON p1.id = t.p1_id
-      LEFT JOIN `$table_p` p2 ON p2.id = t.p2_id
+	  p0.fname as fname0, p0.sname as sname0, p0.sex as sex0, p0.meal as meal0,
+	  p1.fname as fname1, p1.sname as sname1, p1.sex as sex1, p1.meal as meal1
+      FROM `$table_t` t LEFT JOIN `$table_p` p0 ON p0.id = t.p0_id
+      LEFT JOIN `$table_p` p1 ON p1.id = t.p1_id
       ORDER BY t.d_create, t.id",
       ARRAY_A);
     if($entries) {
@@ -131,40 +135,73 @@ function entry_list() {
 <tbody>
 <?php   $i = 1;
         foreach($entries as $entry):
-            $scat = $entry['sex1'] . $entry['sex2'];
+            $scat = $entry['sex0'] . $entry['sex1'];
             switch($scat){
-            case 'mw':
-            case 'wm': $cat = 'MW'; break;
-            case 'mm':
-            case  'm': $cat = 'MM'; break;
-            case 'ww':
-            case  'w': $cat = 'WW'; break;
-            default: $cat = 'XX';
-        }
+                case 'mw':
+                case 'wm': $cat = 'MW'; break;
+                case 'mm':
+                case  'm': $cat = 'MM'; break;
+                case 'ww':
+                case  'w': $cat = 'WW'; break;
+                default: $cat = 'XX';
+            }
 ?>
 <tr class="<?php echo ($i % 2 == 0) ? 'even' : 'odd' ?>">
 <td class="number"><?php echo($i++) ?></td><td><?php echo $entry['name'] ?></td>
+<td><?php echo $entry['fname0'] . " " . $entry['sname0'] ?></td>
 <td><?php echo $entry['fname1'] . " " . $entry['sname1'] ?></td>
-<td><?php echo $entry['fname2'] . " " . $entry['sname2'] ?></td>
 <td><?php echo $cat ?></td><td><?php echo $entry['comment'] ?></td>
 <td class="links"><a href="zadejheslo.php?id=<?php echo $entry['id'] ?>"><img src="<?php echo $url ?>/img/edit.gif" title="Upravit" width="14" height="14" border="0"></a></td>
-<td class="links"><a href="delete.php?id=<?php echo $entry['id'] ?>"><img src="<?php echo $url ?>/img/delete.gif" title="Smazat" width="14" height="14" border="0"></a></td>
+<td class="links"><a href="<?php echo home_url('_delete?id='. $entry['id']) ?>"><img src="<?php echo $url ?>/img/delete.gif" title="Smazat" width="14" height="14" border="0"></a></td>
 </tr>
 <?php   endforeach;?>
 </tbody></table>
+    <a href="<?php echo home_url('_error')?>">Error Page</a>
 <?php
     }
 }
 add_shortcode('entrylist', 'entry_list');
-/*
-?>
-<p><table class="entries" border="1" cellpadding="3">
-<thead><tr>
-<td>Číslo</td><td>Tým</td><td>1. závodník</td><td>2. závodník</td><td>Kat.</td><td>Poznámka</td><td></td><td></td>
-</tr></thead>
-<tbody>
+
+function error_page() {
+    echo '<div class="errmsg">';
+    echo isset($_SESSION['error']) ? $_SESSION['error']
+      : 'Vyskytla se neočekávaná chyba.';
+    echo "</div>\n";
+}
+add_shortcode('error', 'error_page');
+
+function delete_form() {
+    if(isset($_REQUEST['id'])) {
+        $id = sanitize_id($_REQUEST['id']);
+        if($id > 0) {
+            global $wpdb;
+            $tb_prefix = get_theme_mod('entry_race_id'); $table_t = $tb_prefix . '_team'; $table_p = $tb_prefix . '_person';
+            $entry = $wpdb->get_row("SELECT t.id, t.name, t.comment,
+              p0.fname as fname0, p0.sname as sname0, p0.sex as sex0, p0.meal as meal0,
+              p1.fname as fname1, p1.sname as sname1, p1.sex as sex1, p1.meal as meal1
+              FROM `$table_t` t LEFT JOIN `$table_p` p0 ON p0.id = t.p0_id
+              LEFT JOIN `$table_p` p1 ON p1.id = t.p1_id
+              WHERE t.id = $id",
+              ARRAY_A);
+            if($entry) { ?>
+<table id="entryshow">
+<tr class="first"><td>Tým:</td><td><?php echo $entry['name'] ?></td></tr>
+<tr><td>1. závodník:</td><td><?php echo $entry['fname0'] . '&nbsp;' . $entry['sname0'] ?></td></tr>
+<tr><td>2. závodník:</td><td><?php echo $entry['fname1'] . '&nbsp;' . $entry['sname1'] ?></td></tr>
+<tr><td>Poznámka:</td><td><?php echo $entry['comment'] ?></td></tr>
+</table>
+<form action="" method="post">
+<input type="hidden" name="id" value="<?php echo $id ?>" />
+<p>Heslo:  <input type="text" name="pwd" /></p>
+<p><input type="submit" name="pwdok" value=" Smazat! "></p>
+</form>
 <?php
-        foreach($entries as $entry) {
-            if($id != $entry['id'])
- */
+                return;
+            }
+        }
+    }
+    echo '<div class="errmsg">Chybné, nebo neexistující ID záznamu.</div>';
+}
+add_shortcode('deleteform', 'delete_form');
+
 ?>

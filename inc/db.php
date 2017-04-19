@@ -27,18 +27,20 @@ CREATE TABLE IF NOT EXISTS `{$prefix}_team` (
   `d_modify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `d_create` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `password` varchar(32) COLLATE utf8_czech_ci NOT NULL,
-  `p1_id` int(11) DEFAULT NULL,
-  `p2_id` int(11) DEFAULT NULL
+  `p0_id` int(11) DEFAULT NULL,
+  `p1_id` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;");
     }
     return $res;
 }
 
 function pwd_check($id, $pwd) {
+    if(current_user_can('edit_pages')) return TRUE;
     $prefix = get_theme_mod('entry_race_id');
     global $wpdb;
-    $db_pwd = $wpdb->get_var("SELECT password FROM `{$prefix}_team` WHERE id = $id"); // TODO escape
-    return ($db_pwd == $pwd);
+    $sql = $wpdb->prepare("SELECT password FROM `{$prefix}_team` WHERE id = %d", $id);
+    $db_pwd = $wpdb->get_var($sql);
+    return ($db_pwd && $pwd == $db_pwd);
 }
 
 function tables_init() {

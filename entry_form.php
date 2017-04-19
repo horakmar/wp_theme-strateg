@@ -10,22 +10,23 @@ $tb_prefix = get_theme_mod('entry_race_id');
 $invalid = array();
 if(! isset($_REQUEST['action'])) $_REQUEST['action'] = 'new';
 
-if(isset($_REQUEST['pwdok'])) {     // Password form submitted
+if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
     $vals = [];
-    if(pwd_check($_REQUEST['id'], $_REQUEST['pwd'])){
-        $team = $wpdb->get_row("SELECT * FROM {$tb_prefix}_team WHERE id = {$_REQUEST['id']}", ARRAY_A); // TODO escape
+    $id = sanitize_id($_REQUEST['id']);
+    if(pwd_check($id, $_REQUEST['pwd'])){
+        $team = $wpdb->get_row("SELECT * FROM {$tb_prefix}_team WHERE id = $id", ARRAY_A);
         $vals['team'] = $team['name'];
         foreach(['comment', 'password'] as $f) {
             $vals[$f] = $team[$f];
         }
-        $persons = $wpdb->get_results( "SELECT * FROM {$tb_prefix}_person WHERE team_id = {$_REQUEST['id']}", ARRAY_A); // TODO escape
-        $i = 0;
-        foreach($persons as $p) {
-            foreach(['fname','sname','ybirth','sex','phone','email','shocart_id','meal'] as $f) {
-                $vals[$f][$i] = $p[$f];
+        for($i=0; $i<2; $i++){
+            $key = "p{$i}_id";
+            if($team[$key]){
+                $person = $wpdb->get_row("SELECT * FROM {$tb_prefix}_person WHERE id = {$team[$key]}", ARRAY_A);
+                foreach(['fname','sname','ybirth','sex','phone','email','shocart_id','meal'] as $f) {
+                    $vals[$f][$i] = $person[$f];
+                }
             }
-            $i++;
-            if($i > 1) break;
         }
     }
 } elseif(isset($_REQUEST['ok'])) { 	// Input form submitted
@@ -37,7 +38,7 @@ if(isset($_REQUEST['pwdok'])) {     // Password form submitted
 		foreach($reqs as $r) {
 			if(empty($_REQUEST[$r][$i])) $invalid[$r][$i] = 1;
 		}
-		if(req('alone') == 'on') break;
+		if(isset($_REQUEST['alone']) && $_REQUEST['alone'] == 'on') break;
 	}
 
 	if(empty($invalid)){
@@ -68,8 +69,8 @@ if(isset($_REQUEST['pwdok'])) {     // Password form submitted
 		foreach($fields as $f) {
 			$data[$f] = $_REQUEST[$f];
 		}
-        $data['p1_id'] = $ids[0];
-        $data['p2_id'] = $ids[1];
+        $data['p0_id'] = $ids[0];
+        $data['p1_id'] = $ids[1];
 		if($_REQUEST['action'] == 'new'){
 			$data['d_create'] = date('Y-m-d H:i:s');
 //			echo "Insert:\n<pre>";
@@ -78,7 +79,7 @@ if(isset($_REQUEST['pwdok'])) {     // Password form submitted
 			$wpdb->insert($table, $data);
 		}
 
-		wp_redirect(get_home_url()); // TODO
+		wp_redirect(home_url('_list')); // TODO
 		exit;
     } else {    // Invalid form - redisplay
         $vals = $_REQUEST;
@@ -104,16 +105,6 @@ get_header();
 	</div><!-- #primary -->
 
 <?php
-/*
-echo "<pre>\n";
-echo("site URL = ". site_url(). "\nhome URL = ". home_url(). "\n");
-echo("admin URL = ". admin_url(). "\ncontent URL = ". content_url(). "\n");
-echo("plugins URL = ". plugins_url(). "\nincludes URL = ". includes_url(). "\n");
-echo("permalink = ". get_permalink(). "\npermalink = ". get_permalink($post->ID). "\n");
-$res = $wpdb->get_results('SHOW TABLES');
-print_r($res);
-echo "</pre>\n";
- */
 
 get_sidebar();
 get_footer();

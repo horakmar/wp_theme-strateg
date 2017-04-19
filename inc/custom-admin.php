@@ -11,7 +11,7 @@ function custom_toolbar() {
 	$args = array(
 		'id'     => 'tbcreate',
 		'title'  => 'Vytvořit tabulky',
-		'href'   => get_home_url(NULL, 'tbcreate'),
+		'href'   => home_url('_tbcreate'),
 	);
 	$wp_admin_bar->add_menu( $args );
 

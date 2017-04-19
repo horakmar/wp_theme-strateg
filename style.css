@@ -723,6 +723,19 @@ button.menu-toggle {
     text-align: center;
 }
 
+#entryshow {
+    width: auto;
+    background: #571221;
+}
+#entryshow td {
+    padding: 0 5px;
+	border: 1px solid #000;
+}
+#entryshow .first {
+    background: #5e4613;
+}
+
+
 /*--------------------------------------------------------------
 ## Comments
 --------------------------------------------------------------*/
