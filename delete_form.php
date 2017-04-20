@@ -7,18 +7,22 @@
  * @package strateg
  */
 $tb_prefix = get_theme_mod('entry_race_id');
-$invalid = array();
 if(isset($_REQUEST['pwdok'])) {     // Password form submitted
     $id = sanitize_id($_REQUEST['id']);
     if(pwd_check($id, $_REQUEST['pwd'])){
-        $pers_ids = $wpdb->get_row("SELECT p1_id, p2_id FROM {$tb_prefix}_team WHERE id = $id", ARRAY_N);
+        $pers_ids = $wpdb->get_row("SELECT p0_id, p1_id FROM {$tb_prefix}_team WHERE id = $id", ARRAY_N);
         foreach($pers_ids as $i){
             if($i){
+                echo "... deleting $i\n";
                 $wpdb->delete($tb_prefix . '_person', ['id' => $i], ['%d']);
             }
         }
         $wpdb->delete($tb_prefix . '_team', ['id' => $id], ['%d']);
-        wp_redirect(home_url('_list'));     // TODO
+        if($target = get_page_by_path('_accepted', OBJECT)) {
+            wp_redirect(home_url('_accepted?action=delete'));
+        } else {
+            wp_redirect(home_url('_list'));
+        }
     } else {
         $errmsg = 'Heslo nesouhlasí, přihlášku nelze smazat.';
     }

@@ -40,8 +40,17 @@ function sanitize_id($id) {
     }
 }
 
+function safe_redirect($slug, $action = '') {
+    if($target = get_page_by_path($slug, OBJECT)) {
+        if($action) $slug .= "?$action";
+        wp_redirect(home_url($slug));
+    } else {
+        wp_redirect(home_url('_list'));
+    }
+}
+
 function entry_form() {
-    global $vals;
+    global $vals, $team_id;
 ?>
 <div id="entryform">
 <form action="" method="post">
@@ -103,6 +112,10 @@ endfor;
 <input type="text" name="comment" size="60"<?php echo ev('comment')?>></p>
 <p>Heslo pro změny v přihlášce<br>
 <input type="text" name="password"<?php echo ev('password'); inval('password') ?>></p>
+<?php if(isset($team_id)): ?>
+<input type="hidden" name="id" value="<?php echo $team_id ?>">
+<input type="hidden" name="pwd" value="<?php echo $_REQUEST['pwd'] ?>">
+<?php endif ?>
 <p><input type="submit" name="ok" value=" Odeslat "></p>
 </form>
 </div><!-- entryform -->
@@ -151,7 +164,7 @@ function entry_list() {
 <td><?php echo $entry['fname0'] . " " . $entry['sname0'] ?></td>
 <td><?php echo $entry['fname1'] . " " . $entry['sname1'] ?></td>
 <td><?php echo $cat ?></td><td><?php echo $entry['comment'] ?></td>
-<td class="links"><a href="zadejheslo.php?id=<?php echo $entry['id'] ?>"><img src="<?php echo $url ?>/img/edit.gif" title="Upravit" width="14" height="14" border="0"></a></td>
+<td class="links"><a href="<?php echo home_url('_edit?id='. $entry['id']) ?>"><img src="<?php echo $url ?>/img/edit.gif" title="Upravit" width="14" height="14" border="0"></a></td>
 <td class="links"><a href="<?php echo home_url('_delete?id='. $entry['id']) ?>"><img src="<?php echo $url ?>/img/delete.gif" title="Smazat" width="14" height="14" border="0"></a></td>
 </tr>
 <?php   endforeach;?>
@@ -170,10 +183,20 @@ function error_page() {
 }
 add_shortcode('error', 'error_page');
 
-function delete_form() {
+function pwd_form() {
+    if(is_page('_delete')){
+        $formaction = '';
+        $buttontxt = 'Smazat!';
+    } elseif(is_page('_edit')) {
+        $formaction = home_url('_entry');
+        $buttontxt = 'Upravit';
+    } else {
+        echo '<div class="errmsg">Chybné, nebo neexistující ID záznamu.</div>';
+        return;
+    }
     if(isset($_REQUEST['id'])) {
-        $id = sanitize_id($_REQUEST['id']);
-        if($id > 0) {
+        $team_id = sanitize_id($_REQUEST['id']);
+        if($team_id > 0) {
             global $wpdb;
             $tb_prefix = get_theme_mod('entry_race_id'); $table_t = $tb_prefix . '_team'; $table_p = $tb_prefix . '_person';
             $entry = $wpdb->get_row("SELECT t.id, t.name, t.comment,
@@ -181,7 +204,7 @@ function delete_form() {
               p1.fname as fname1, p1.sname as sname1, p1.sex as sex1, p1.meal as meal1
               FROM `$table_t` t LEFT JOIN `$table_p` p0 ON p0.id = t.p0_id
               LEFT JOIN `$table_p` p1 ON p1.id = t.p1_id
-              WHERE t.id = $id",
+              WHERE t.id = $team_id",
               ARRAY_A);
             if($entry) { ?>
 <table id="entryshow">
@@ -190,10 +213,10 @@ function delete_form() {
 <tr><td>2. závodník:</td><td><?php echo $entry['fname1'] . '&nbsp;' . $entry['sname1'] ?></td></tr>
 <tr><td>Poznámka:</td><td><?php echo $entry['comment'] ?></td></tr>
 </table>
-<form action="" method="post">
-<input type="hidden" name="id" value="<?php echo $id ?>" />
+<form action="<?php echo $formaction ?>" method="post">
+<input type="hidden" name="id" value="<?php echo $team_id ?>" />
 <p>Heslo:  <input type="text" name="pwd" /></p>
-<p><input type="submit" name="pwdok" value=" Smazat! "></p>
+<p><input type="submit" name="pwdok" value=" <?php echo $buttontxt ?> "></p>
 </form>
 <?php
                 return;
@@ -202,6 +225,25 @@ function delete_form() {
     }
     echo '<div class="errmsg">Chybné, nebo neexistující ID záznamu.</div>';
 }
-add_shortcode('deleteform', 'delete_form');
+add_shortcode('pwdform', 'pwd_form');
+
+function accepted_page(){
+    if(! isset($_REQUEST['action'])) $_REQUEST['action'] = 'none';
+    switch($_REQUEST['action']) {
+    case 'new':
+        echo '<p>Přihláška byla přijata, budeme se těšit na setkání.</p>';
+        break;
+    case 'edit':
+        echo '<p>Změny byly uloženy.</p>';
+        break;
+    case 'delete':
+        echo '<p>Přihláška byla smazána.</p>';
+        break;
+    default:
+        echo '<p>Neznámá akce, asi je něco špatně.</p>';
+    }
+}
+add_shortcode('accepted', 'accepted_page');
+
 
 ?>

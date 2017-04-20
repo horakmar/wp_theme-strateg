@@ -8,13 +8,14 @@
  */
 $tb_prefix = get_theme_mod('entry_race_id');
 $invalid = array();
-if(! isset($_REQUEST['action'])) $_REQUEST['action'] = 'new';
+$action = (isset($_REQUEST['id'])) ? 'edit' : 'new';
 
 if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
+    $action = 'edit';
     $vals = [];
-    $id = sanitize_id($_REQUEST['id']);
-    if(pwd_check($id, $_REQUEST['pwd'])){
-        $team = $wpdb->get_row("SELECT * FROM {$tb_prefix}_team WHERE id = $id", ARRAY_A);
+    $team_id = sanitize_id($_REQUEST['id']);
+    if(pwd_check($team_id, $_REQUEST['pwd'])){
+        $team = $wpdb->get_row("SELECT * FROM {$tb_prefix}_team WHERE id = $team_id", ARRAY_A);
         $vals['team'] = $team['name'];
         foreach(['comment', 'password'] as $f) {
             $vals[$f] = $team[$f];
@@ -26,8 +27,13 @@ if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
                 foreach(['fname','sname','ybirth','sex','phone','email','shocart_id','meal'] as $f) {
                     $vals[$f][$i] = $person[$f];
                 }
+            }else{
+                $vals['alone'] = 'on';
             }
         }
+    } else {
+        safe_redirect('_badpwd');
+        exit;
     }
 } elseif(isset($_REQUEST['ok'])) { 	// Input form submitted
 	// Validation
@@ -41,9 +47,16 @@ if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
 		if(isset($_REQUEST['alone']) && $_REQUEST['alone'] == 'on') break;
 	}
 
-	if(empty($invalid)){
-		$table = $tb_prefix . '_person';
-        $ids = [NULL, NULL];
+	if(empty($invalid)){        // Valid
+        if($action == 'edit') {
+            $team_id = sanitize_id($_REQUEST['id']);
+            if(! pwd_check($team_id, $_REQUEST['pwd'])) {
+                safe_redirect('_badpwd');
+            }
+            $pers_ids = $wpdb->get_row("SELECT p0_id, p1_id FROM {$tb_prefix}_team WHERE id = $team_id", ARRAY_N);
+        }else{
+            $pers_ids = [NULL, NULL];
+        }
 		$fields = ['fname','sname','ybirth','sex','phone','email','shocart_id'];
 		for($i=0; $i < 2; $i++) {
 			$data = [];
@@ -52,34 +65,39 @@ if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
 			}
             $data['meal'] = isset($_REQUEST['meal'][$i]) ? $_REQUEST['meal'][$i] : 0;
 			$data['password'] = $_REQUEST['password'];
-			if($_REQUEST['action'] == 'new'){
-//  			echo "Insert:\n<pre>";
-//				print_r($data);
-//              echo "</pre>";
-                $wpdb->insert($table, $data);
-                $ids[$i] = $wpdb->insert_id;
-			}
-			if(isset($_REQUEST['alone']) && $_REQUEST['alone'] == 'on') break;
+            if($pers_ids[$i]) {
+                $data['id'] = $pers_ids[$i];
+                $wpdb->replace($tb_prefix . '_person', $data);
+            } else {
+                $wpdb->insert($tb_prefix . '_person', $data);
+                $pers_ids[$i] = $wpdb->insert_id;
+            }
+            if(isset($_REQUEST['alone']) && $_REQUEST['alone'] == 'on'){
+                if($pers_ids[1]){
+                    $wpdb->delete($tb_prefix . '_person', ['id' => $pers_ids[1]], ['%d']);
+                    $pers_ids[1] == NULL;
+                }
+                break;
+            }
 		}
 
-		$table = $tb_prefix . '_team';
 		$data = [];
 		$data['name'] = $_REQUEST['team'];
 		$fields = ['comment', 'password'];
 		foreach($fields as $f) {
 			$data[$f] = $_REQUEST[$f];
 		}
-        $data['p0_id'] = $ids[0];
-        $data['p1_id'] = $ids[1];
-		if($_REQUEST['action'] == 'new'){
+        $data['p0_id'] = $pers_ids[0];
+        $data['p1_id'] = $pers_ids[1];
+        if($action == 'edit') {
+            $data['id'] = $team_id;
+            $wpdb->replace($tb_prefix . '_team', $data);
+        } else {
 			$data['d_create'] = date('Y-m-d H:i:s');
-//			echo "Insert:\n<pre>";
-//			print_r($data);
-//          echo "</pre>";
-			$wpdb->insert($table, $data);
+			$wpdb->insert($tb_prefix . '_team', $data);
 		}
 
-		wp_redirect(home_url('_list')); // TODO
+        safe_redirect('_accepted', "action=$action");
 		exit;
     } else {    // Invalid form - redisplay
         $vals = $_REQUEST;
