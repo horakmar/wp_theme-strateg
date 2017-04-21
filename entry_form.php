@@ -10,7 +10,7 @@ $tb_prefix = get_theme_mod('entry_race_id');
 $invalid = array();
 $action = (isset($_REQUEST['id'])) ? 'edit' : 'new';
 
-if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
+if(isset($_REQUEST['pwdok'])) {     // action = edit, Password form submitted
     $action = 'edit';
     $vals = [];
     $team_id = sanitize_id($_REQUEST['id']);
@@ -20,7 +20,7 @@ if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
         foreach(['comment', 'password'] as $f) {
             $vals[$f] = $team[$f];
         }
-        for($i=0; $i<2; $i++){
+        for($i=0; $i<2; $i++){  // Get people information
             $key = "p{$i}_id";
             if($team[$key]){
                 $person = $wpdb->get_row("SELECT * FROM {$tb_prefix}_person WHERE id = {$team[$key]}", ARRAY_A);
@@ -35,7 +35,7 @@ if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
         safe_redirect('_badpwd');
         exit;
     }
-} elseif(isset($_REQUEST['ok'])) { 	// Input form submitted
+} elseif(isset($_REQUEST['ok'])) { 	// Input form submitted, action edit or new
 	// Validation
 	if(empty($_REQUEST['team'])) $invalid['team'] = 1;
 	if(empty($_REQUEST['password'])) $invalid['password'] = 1;
@@ -50,7 +50,7 @@ if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
 	if(empty($invalid)){        // Valid
         if($action == 'edit') {
             $team_id = sanitize_id($_REQUEST['id']);
-            if(! pwd_check($team_id, $_REQUEST['pwd'])) {
+            if(! pwd_check($team_id, $_REQUEST['pwd'])) {   // Check password once more - one could forge fake id to edit form
                 safe_redirect('_badpwd');
             }
             $pers_ids = $wpdb->get_row("SELECT p0_id, p1_id FROM {$tb_prefix}_team WHERE id = $team_id", ARRAY_N);
@@ -58,22 +58,21 @@ if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
             $pers_ids = [NULL, NULL];
         }
 		$fields = ['fname','sname','ybirth','sex','phone','email','shocart_id'];
-		for($i=0; $i < 2; $i++) {
+		for($i=0; $i < 2; $i++) {   // Process people
 			$data = [];
 			foreach($fields as $f) {
 				$data[$f] = $_REQUEST[$f][$i];
 			}
             $data['meal'] = isset($_REQUEST['meal'][$i]) ? $_REQUEST['meal'][$i] : 0;
-			$data['password'] = $_REQUEST['password'];
-            if($pers_ids[$i]) {
+            if($pers_ids[$i]) {     // Update existing person
                 $data['id'] = $pers_ids[$i];
                 $wpdb->replace($tb_prefix . '_person', $data);
-            } else {
+            } else {                // Insert new person
                 $wpdb->insert($tb_prefix . '_person', $data);
                 $pers_ids[$i] = $wpdb->insert_id;
             }
             if(isset($_REQUEST['alone']) && $_REQUEST['alone'] == 'on'){
-                if($pers_ids[1]){
+                if($pers_ids[1]){   // Delete if person not exists any more (with buddy -> alone)
                     $wpdb->delete($tb_prefix . '_person', ['id' => $pers_ids[1]], ['%d']);
                     $pers_ids[1] == NULL;
                 }
@@ -96,7 +95,6 @@ if(isset($_REQUEST['pwdok'])) {     // action = edit, password form submitted
 			$data['d_create'] = date('Y-m-d H:i:s');
 			$wpdb->insert($tb_prefix . '_team', $data);
 		}
-
         safe_redirect('_accepted', "action=$action");
 		exit;
     } else {    // Invalid form - redisplay

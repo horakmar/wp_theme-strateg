@@ -1,6 +1,8 @@
 <?php
-function create_tables() {
-    $prefix = get_theme_mod('entry_race_id');
+/**
+ * Create database tables with given prefix
+ */
+function create_tables($prefix) {
 	global $wpdb;
     $res = $wpdb->query("
 CREATE TABLE IF NOT EXISTS `{$prefix}_person` (
@@ -11,13 +13,12 @@ CREATE TABLE IF NOT EXISTS `{$prefix}_person` (
   `sex` enum('m','w') DEFAULT NULL,
   `phone` varchar(30) CHARACTER SET ascii NOT NULL,
   `email` varchar(50) CHARACTER SET ascii NOT NULL,
-  `password` varchar(32) NOT NULL,
   `d_modify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `shocart_id` int(10) unsigned NOT NULL,
   `meal` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 
-    if($res > 0){
+    if($res){
         $res = $wpdb->query("
 CREATE TABLE IF NOT EXISTS `{$prefix}_team` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -34,28 +35,18 @@ CREATE TABLE IF NOT EXISTS `{$prefix}_team` (
     return $res;
 }
 
-function pwd_check($id, $pwd) {
-    if(current_user_can('edit_pages')) return TRUE;
-    $prefix = get_theme_mod('entry_race_id');
-    global $wpdb;
-    $sql = $wpdb->prepare("SELECT password FROM `{$prefix}_team` WHERE id = %d", $id);
-    $db_pwd = $wpdb->get_var($sql);
-    return ($db_pwd && $pwd == $db_pwd);
-}
-
+/**
+ * Database tables creation page
+ */
 function tables_init() {
 	$prefix = get_theme_mod('entry_race_id');
 	if(empty($prefix)) {
-		echo '<div class="errmsg">Není vyplněn identifikátor závodu.</div>';
-	}
-	if(create_tables() == 0){
-		echo '<div class="errmsg">Tabulky se nepodařilo vytvořit.</div>';
-	} else {
+		echo '<div class="errmsg">Tabulky nelze vytvořit, není vyplněn identifikátor závodu.</div>';
+	} elseif(create_tables($prefix)) {
 		echo '<div class="okmsg">Tabulky vytvořeny.</div>';
+	} else {
+		echo '<div class="errmsg">Tabulky se nepodařilo vytvořit.</div>';
 	}
 }
 add_shortcode('tbinit', 'tables_init');
-
-
-
 ?>

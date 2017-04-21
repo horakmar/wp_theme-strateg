@@ -699,6 +699,13 @@ button.menu-toggle {
 	padding: 3px 3px 3px 10px;
 	border-radius: 3px;
 }
+.deadline {
+    color: #ff8700;
+    font-weight:bold;
+    text-align: center;
+    padding: 10px 0;
+}
+
 #entrylist {
     background: #0c3b35;
 }

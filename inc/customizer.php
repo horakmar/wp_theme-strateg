@@ -73,6 +73,7 @@ function strateg_customize_register( $wp_customize ) {
         'sanitize_callback' => 'sanitize_date',
     ));
     $wp_customize->add_setting('entry_show_meal');
+    $wp_customize->add_setting('entries_enabled');
     $wp_customize->add_setting('entry_debug');
 
     $wp_customize->add_control('entry_race_id', array(
@@ -88,6 +89,11 @@ function strateg_customize_register( $wp_customize ) {
     $wp_customize->add_control( 'entry_show_meal', array(
         'type' => 'checkbox',
         'label' => 'Zobrazit dotaz na jídlo',
+        'section' => 'entry_form_section',
+    ));
+    $wp_customize->add_control( 'entries_enabled', array(
+        'type' => 'checkbox',
+        'label' => 'Povolit přihlášky',
         'section' => 'entry_form_section',
     ));
     $wp_customize->add_control( 'entry_debug', array(
