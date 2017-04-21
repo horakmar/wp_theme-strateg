@@ -27,7 +27,7 @@ function safe_redirect($slug, $action = '', $default = '_list') {
  */
 function entry_scripts() {
     if(is_page_template('entry_form.php')){
-        wp_enqueue_script('entry-js', get_template_directory_uri() . '/js/entry_form.js');
+        wp_enqueue_script('entry-js', get_template_directory_uri() . '/js/entry_form.js', array(), '20170421', true );
     }
 }
 add_action('wp_enqueue_scripts', 'entry_scripts');
@@ -183,7 +183,8 @@ function entry_list() {
 <td class="number" width="5%">Číslo</td><td>Tým</td><td>1. závodník</td><td>2. závodník</td><td>Kat.</td><td>Poznámka</td><td class="links"></td><td class="links"></td>
 </tr></thead>
 <tbody>
-<?php   $i = 1;
+<?php
+        $i = 1;
         foreach($entries as $entry):
             $scat = $entry['sex0'] . $entry['sex1'];
             switch($scat){
@@ -208,6 +209,8 @@ function entry_list() {
 <?php   endforeach;?>
 </tbody></table>
 <?php
+    } else {
+        echo '<div class="noentries">Dosud není nikdo přihlášen.</div>';
     }
 }
 add_shortcode('entrylist', 'entry_list');

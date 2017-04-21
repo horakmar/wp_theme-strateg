@@ -705,6 +705,11 @@ button.menu-toggle {
     text-align: center;
     padding: 10px 0;
 }
+.noentries {
+    font-weight:bold;
+    text-align: center;
+    padding: 10px 0;
+}
 
 #entrylist {
     background: #0c3b35;
