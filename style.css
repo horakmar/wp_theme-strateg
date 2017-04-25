@@ -209,7 +209,7 @@ input[type="search"]::-webkit-search-decoration {
 
 fieldset {
 	border: 1px solid #c0c0c0;
-	margin: 0 2px;
+	margin: 5px 2px;
 	padding: 0.35em 0.625em 0.75em;
 }
 
@@ -689,6 +689,32 @@ button.menu-toggle {
     -moz-box-shadow: none;
     box-shadow: none;
   }
+
+.p {
+    margin-top: 10px;
+}
+
+/* Mobile */
+.col-1 {
+    width: 100%;
+    float: left;
+}
+
+/* Desktop */
+@media only screen and (min-width: 49em) {
+    .col-1 {
+        width: 33.33%;
+        float: left;
+    }
+}
+.row::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+.row {
+    padding: 5px 0;
+}
   
 .invalid {
 	box-shadow: 0 0 10px #ffff00;
@@ -746,7 +772,6 @@ button.menu-toggle {
 #entryshow .first {
     background: #5e4613;
 }
-
 
 /*--------------------------------------------------------------
 ## Comments
@@ -1041,9 +1066,9 @@ textarea {
 }
 
 /* ___ Desktop ( > 960px ) ------------------------------------------ */
-@media only screen and (min-width: 60em) {
+@media only screen and (min-width: 67em) {
     #page {
-        width: 90%;
+        width: 95%;
         max-width: 1080px;
         clear: both;
         margin: auto;

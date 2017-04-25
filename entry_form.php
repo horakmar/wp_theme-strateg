@@ -74,7 +74,7 @@ if(isset($_REQUEST['pwdok'])) {     // action = edit, Password form submitted
             if(isset($_REQUEST['alone']) && $_REQUEST['alone'] == 'on'){
                 if($pers_ids[1]){   // Delete if person not exists any more (with buddy -> alone)
                     $wpdb->delete($tb_prefix . '_person', ['id' => $pers_ids[1]], ['%d']);
-                    $pers_ids[1] == NULL;
+                    $pers_ids[1] = NULL;
                 }
                 break;
             }

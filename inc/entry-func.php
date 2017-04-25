@@ -27,7 +27,7 @@ function safe_redirect($slug, $action = '', $default = '_list') {
  */
 function entry_scripts() {
     if(is_page_template('entry_form.php')){
-        wp_enqueue_script('entry-js', get_template_directory_uri() . '/js/entry_form.js', array(), '20170421', true );
+        wp_enqueue_script('entry-js', get_template_directory_uri() . '/js/entry_form.js', array(), '20170421');
     }
 }
 add_action('wp_enqueue_scripts', 'entry_scripts');
@@ -87,25 +87,27 @@ function entry_form() {
 <?php } elseif(is_entry_time()) { ?>
 <div id="entryform">
 <form action="" method="post">
-<p>Název týmu&nbsp;&nbsp;<input type="text" name="team" size="30"<?php ev('team'); inval('team') ?> required></p>
-<hr>
+<div>Název týmu&nbsp;&nbsp;<input type="text" name="team" size="30"<?php ev('team'); inval('team') ?> required></div>
 <?php
     for($i=0; $i<=1; $i++):
         if($i == 0){
-            echo '<p><b>Biker(ka)</b></p>';
+            echo '<fieldset><legend>Biker(ka)</legend>';
         }else{
-            echo '<p><b>Parťák</b>&nbsp;&nbsp;&nbsp;<input type="checkbox"';
-            ev('alone', 99, 'check', 'on');
-            echo ' name="alone" id="alone" style="vertical-align: middle" onChange="javascript: ToggleSecond(document.getElementById(\'alone\').checked);"> Není - jedu sám</p>';
-            echo "\n";
-            echo '<div id="second_biker">';
+            echo '<fieldset id="second_biker"><legend>Parťák</legend>';
         }
 ?>
-<table class="formtable">
-<tr><td>Jméno</td><td>Příjmení</td><td>Rok narození</td></tr>
-<tr><td><input type="text" id="fname<?php echo $i?>" name="fname[<?php echo $i?>]" size="20"<?php ev('fname',$i); inval('fname', $i) ?> required></td>
-<td><input type="text" id="sname<?php echo $i?>" name="sname[<?php echo $i?>]" size="20"<?php ev('sname',$i); inval('sname', $i) ?>></td>
-<td><select name="ybirth[<?php echo $i?>]" required>
+<div class="row">
+  <div class="col-1">
+    <label for="fname<?php echo $i?>]">Jméno</label><br />
+    <input type="text" id="fname<?php echo $i?>" name="fname[<?php echo $i?>]" size="20"<?php ev('fname',$i); inval('fname', $i) ?> required>
+  </div>
+  <div class="col-1">
+    <label for="sname<?php echo $i?>]">Příjmení</label><br />
+    <input type="text" id="sname<?php echo $i?>" name="sname[<?php echo $i?>]" size="20"<?php ev('sname',$i); inval('sname', $i) ?> required>
+  </div>
+  <div class="col-1">
+    <label for="ybirth[<?php echo $i?>]">Rok narození</label><br />
+    <select name="ybirth[<?php echo $i?>]">
 <?php for($j = 1950; $j <= 2010; $j++){
 	echo "<option";
 	if(isset($vals['ybirth'][$i])){
@@ -115,44 +117,49 @@ function entry_form() {
 	}
 	echo ">$j</option>";
 }?>
-</select></td></tr>
-<tr><td>Telefon</td><td>Email</td><td>Pohlaví</td></tr>
-<tr><td><input type="text" name="phone[<?php echo $i?>]" size="20"<?php ev('phone',$i)?>></td>
-<td><input type="email" name="email[<?php echo $i?>]" size="20"<?php ev('email',$i)?>></td>
-<td><input type="radio" value="m" name="sex[<?php echo $i?>]"<?php ev('sex', $i, 'check', 'm'); inval('sex', $i) ?>>Muž
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="col-1">
+    <label for="phone[<?php echo $i?>]">Telefon</label><br />
+    <input type="text" name="phone[<?php echo $i?>]" size="20"<?php ev('phone',$i)?>>
+  </div>
+  <div class="col-1">
+    <label for="email[<?php echo $i?>]">Email</label><br />
+    <input type="email" name="email[<?php echo $i?>]" size="20"<?php ev('email',$i)?>>
+  </div>
+  <div class="col-1">
+    <label for="sex[<?php echo $i?>]">Pohlaví</label><br />
+    <input type="radio" value="m" name="sex[<?php echo $i?>]"<?php ev('sex', $i, 'check', 'm'); inval('sex', $i) ?>>Muž
 &nbsp;<input type="radio" value="w" name="sex[<?php echo $i?>]"<?php ev('sex', $i, 'check', 'w'); inval('sex', $i) ?>>Žena
-</td></tr>
-<tr><td>SHOCartLiga ID</td><td><?php if(get_theme_mod('entry_show_meal')) echo 'Guláš po dojezdu' ?></td><td></td></tr>
-<tr><td><input type="text" name="shocart_id[<?php echo $i?>]" size="5"<?php ev('shocart_id',$i)?>></td>
-<td>
-<?php if(get_theme_mod('entry_show_meal')){
-    echo '<input type="radio" value="1" name="meal[' . $i . ']"';
-    ev('meal', $i, 'check', 1);
-    echo '>Ano&nbsp;<input type="radio" value="0" name="meal[' . $i . ']"';
-    ev('meal', $i, 'check', 0);
-    echo '>Ne';
-}
+  </div>
+</div>
+<div class="row">
+  <div class="col-1">
+    <label for="shocart_id[<?php echo $i?>]">SHOCartLiga ID</label><br />
+    <input type="text" name="shocart_id[<?php echo $i?>]" size="5"<?php ev('shocart_id',$i)?>>
+  </div>
+</div>
+<?php   if($i == 0){    // First biker ?>
+<div class="p"><input type="checkbox" <?php ev('alone', 99, 'check', 'on') ?> name="alone" id="alone" style="vertical-align: middle" onChange="javascript: ToggleSecond(document.getElementById('alone').checked);"> Jedu sám(a)</div>
+<?php  
+        }
+        echo '</fieldset>';
+    endfor;
 ?>
-</td>
-<td></td>
-</tr></table>
-<hr>
-<?php
-    if($i > 0) echo '</div><!-- second_biker -->';
-endfor;
-?>
-<p>Poznámka - cokoliv byste chtěli dodat<br>
-<input type="text" name="comment" size="60"<?php echo ev('comment')?>></p>
-<p>Heslo pro změny v přihlášce<br>
-<input type="text" name="password"<?php echo ev('password'); inval('password') ?>></p>
+<div class="p"><label for="comment">Poznámka - cokoliv byste chtěli dodat</label><br />
+<input type="text" name="comment" size="60"<?php echo ev('comment')?>></div>
+<div class="p"><label for="password">Heslo pro změny v přihlášce</label><br />
+<input type="text" name="password"<?php echo ev('password'); inval('password') ?> required></div>
 <?php if(isset($team_id)): ?>
 <input type="hidden" name="id" value="<?php echo $team_id ?>">
 <input type="hidden" name="pwd" value="<?php echo $_REQUEST['pwd'] ?>">
 <?php endif ?>
-<p><input type="submit" name="ok" value=" Odeslat "></p>
+<div class="p"><input type="submit" name="ok" value=" Odeslat "></div>
 </form>
 </div><!-- entryform -->
-<script>
+<script type="text/javascript">
 ToggleSecond(document.getElementById('alone').checked);
 </script>
 <?php
